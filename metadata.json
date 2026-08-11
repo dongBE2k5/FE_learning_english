@@ -1,0 +1,5 @@
+{
+  "name": "Vocabulary Learner",
+  "description": "A vocabulary learning app with AI features",
+  "requestFramePermissions": ["microphone"]
+}
