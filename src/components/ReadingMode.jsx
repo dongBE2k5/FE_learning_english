@@ -101,7 +101,7 @@ const ReadingMode = ({ words = [], speak }) => {
                     - Yêu cầu thêm từ người dùng: ${prompt || "Không có"}
                   `;
 
-            const response = await fetch('http://localhost:5000/api/ai/generate', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/ai/generate`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
@@ -242,7 +242,7 @@ Trả về kết quả dưới dạng JSON với cấu trúc:
     ]
 }`;
 
-            const response = await fetch('http://localhost:5000/api/ai/generate', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/ai/generate`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 

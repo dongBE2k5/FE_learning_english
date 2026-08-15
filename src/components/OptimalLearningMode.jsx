@@ -91,7 +91,7 @@ Hãy trả về một đối tượng JSON BẮT BUỘC có cấu trúc:
   "io_prompt": "Một đề bài ngắn bằng tiếng Việt yêu cầu học viên tự đặt một câu tiếng Anh sử dụng từ '${currentWord.en}' trong một tình huống cụ thể."
 }`;
 
-            const response = await fetch('http://localhost:5000/api/ai/generate', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/ai/generate`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -110,7 +110,7 @@ Hãy trả về một đối tượng JSON BẮT BUỘC có cấu trúc:
             setHelperData(parsed);
 
             // Save to database cache
-            await fetch(`http://localhost:5000/api/words/${currentWord.id}/helpers`, {
+            await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/words/${currentWord.id}/helpers`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -172,7 +172,7 @@ Hãy trả về một đối tượng JSON BẮT BUỘC có cấu trúc:
   "feedback": "Nhận xét ngắn gọn bằng tiếng Việt về lỗi sai nếu có, cấu trúc ngữ pháp học viên đã dùng và cách cải thiện câu viết."
 }`;
 
-            const response = await fetch('http://localhost:5000/api/ai/generate', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/ai/generate`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ prompt, jsonMode: true })
