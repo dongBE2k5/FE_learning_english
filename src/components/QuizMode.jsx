@@ -611,24 +611,24 @@ const QuizModeInner = ({ words, speak }) => {
                 </span>
             </div>
 
-            <div className="bg-white dark:bg-slate-900 p-8 rounded-3xl shadow-sm border border-gray-200 dark:border-slate-800 relative transition-colors">
+            <div className="bg-white dark:bg-slate-900 p-5 md:p-8 rounded-3xl shadow-sm border border-gray-200 dark:border-slate-800 relative transition-colors">
                 
                 {/* Audio speaker button (Hidden in vi_to_en and category_to_en until user answers to avoid spoilers) */}
-                <div className="absolute right-4 top-4">
+                <div className="absolute right-3 top-3 md:right-4 md:top-4">
                     {!q.type.startsWith('listen_') && (q.type === 'en_to_vi' || q.type === 'en_to_category' || selectedOptionId !== null) ? (
                         <button 
                             onClick={(e) => speak(q.target.en, e)}
-                            className="p-3 bg-indigo-50 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400 rounded-full hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition cursor-pointer"
+                            className="p-2 md:p-3 bg-indigo-50 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400 rounded-full hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition cursor-pointer"
                             title="Nghe phát âm (Space)"
                         >
                             <Volume2 size={20} />
                         </button>
                     ) : (
-                        <div className="w-11 h-11" />
+                        <div className="w-10 h-10 md:w-11 md:h-11" />
                     )}
                 </div>
 
-                <p className="text-center text-xs font-black uppercase text-gray-400 dark:text-slate-500 tracking-wider mb-2">
+                <p className="text-center text-[10px] md:text-xs font-black uppercase text-gray-400 dark:text-slate-500 tracking-wider mb-2 mt-4 md:mt-0">
                     {q.type === 'en_to_vi' ? 'Từ này có nghĩa là gì?' : 
                      q.type === 'vi_to_en' ? 'Nghĩa này là của từ tiếng Anh nào?' :
                      q.type === 'en_to_category' ? 'Từ này thuộc loại từ / nhóm nào?' :
@@ -638,17 +638,17 @@ const QuizModeInner = ({ words, speak }) => {
                      'Nghe và chọn nghĩa tiếng Việt'}
                 </p>
 
-                <h2 className="text-4xl font-extrabold text-center text-indigo-700 dark:text-indigo-400 leading-tight">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-center text-indigo-700 dark:text-indigo-400 leading-tight break-words px-2 md:px-8">
                     {q.type === 'en_to_vi' || q.type === 'en_to_category' ? q.target.en : 
                      q.type === 'vi_to_en' ? q.target.vi : 
                      q.type === 'category_to_en' ? (q.target.category || "Từ vựng") :
                      (
                         <button 
                             onClick={(e) => speak(q.type === 'listen_example' ? (q.target.example_en || q.target.example) : q.target.en, e)}
-                            className="p-6 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 rounded-full hover:bg-indigo-200 dark:hover:bg-indigo-800/50 transition cursor-pointer mx-auto block"
+                            className="p-5 md:p-6 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 rounded-full hover:bg-indigo-200 dark:hover:bg-indigo-800/50 transition cursor-pointer mx-auto block mt-4"
                             title="Nghe lại (Space)"
                         >
-                            <Headphones size={48} className={selectedOptionId === null ? "animate-pulse" : ""} />
+                            <Headphones size={36} className={`md:w-12 md:h-12 ${selectedOptionId === null ? "animate-pulse" : ""}`} />
                         </button>
                      )}
                 </h2>
