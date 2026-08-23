@@ -237,7 +237,7 @@ function App() {
           streak={streak}
         />
         
-        <div className="flex flex-1 overflow-hidden relative">
+        <div className="flex flex-1 overflow-hidden relative min-h-0">
           <Sidebar 
             activeTab={activeTab} 
             setActiveTab={(tab) => {
