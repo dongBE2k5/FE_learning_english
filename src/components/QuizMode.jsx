@@ -150,6 +150,9 @@ const QuizModeInner = ({ words, speak }) => {
                 return;
             }
             
+            // Only generate questions when the quiz has actually started
+            if (!started) return;
+            
             // Shuffle and test all available words of the day
             const shuffled = [...words].sort(() => 0.5 - Math.random());
             const selected = shuffled;
@@ -277,7 +280,7 @@ const QuizModeInner = ({ words, speak }) => {
         } catch (error) {
             console.error("QuizMode generation error:", error);
         }
-    }, [words, key, quizDirection, quizSettings]);
+    }, [words, key, quizDirection, quizSettings, started]);
 
     // Auto-pronounce for standard (en_to_vi), listening and en_to_category questions at question load
     useEffect(() => {
