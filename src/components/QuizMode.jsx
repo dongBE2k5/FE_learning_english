@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+﻿import React, { useEffect, useState, useRef } from "react";
 import { CheckCircle2, Volume2, XCircle, Sparkles, BookOpen, RefreshCw, Headphones, Tag, MessageSquare, Settings2, ChevronDown, ChevronUp } from "lucide-react";
 import IpaGuide from "./IpaGuide";
 import { recordWordResult } from "../utils/progressTracker";
@@ -601,8 +601,8 @@ const QuizModeInner = ({ words, speak }) => {
     const q = questions[currentQ];
     
     return (
-        <div className="max-w-2xl mx-auto animate-fade-in space-y-6">
-            <div className="flex justify-between items-end">
+        <div className="max-w-2xl mx-auto animate-fade-in space-y-3 md:space-y-6 pb-20 md:pb-0">
+            <div className="flex justify-between items-end px-2 md:px-0">
                 <span className="text-xs font-mono font-black text-gray-400 dark:text-slate-550 uppercase tracking-widest">
                     CÂU HỎI {currentQ + 1} / {questions.length}
                 </span>
@@ -692,28 +692,28 @@ const QuizModeInner = ({ words, speak }) => {
             </div>
 
             {/* Multiple Choice Options Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
                 {q.options.map((opt, index) => {
                     const isTargetOpt = q.type === 'en_to_category' 
                         ? opt.en === (q.target.category || "Từ vựng") 
                         : opt.en === q.target.en;
                     const isSelectedOpt = opt.en === selectedOptionId;
                     
-                    let buttonClass = "p-4 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-2xl shadow-sm hover:border-indigo-500 dark:hover:border-indigo-500 hover:shadow-md transition text-gray-700 dark:text-slate-350 text-left relative overflow-hidden cursor-pointer";
+                    let buttonClass = "p-3 md:p-4 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-2xl shadow-sm hover:border-indigo-500 dark:hover:border-indigo-500 hover:shadow-md transition text-gray-700 dark:text-slate-350 text-left relative overflow-hidden cursor-pointer";
                     let icon = null;
                     
                     if (selectedOptionId !== null) {
                         if (isTargetOpt) {
                             // Highlight the correct answer in green
-                            buttonClass = "p-4 bg-green-50 dark:bg-green-950/20 border-2 border-green-500 dark:border-green-600 rounded-2xl shadow-sm text-green-800 dark:text-green-400 text-left font-bold relative overflow-hidden";
+                            buttonClass = "p-3 md:p-4 bg-green-50 dark:bg-green-950/20 border-2 border-green-500 dark:border-green-600 rounded-2xl shadow-sm text-green-800 dark:text-green-400 text-left font-bold relative overflow-hidden";
                             icon = <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 text-green-500" size={20} />;
                         } else if (isSelectedOpt) {
                             // Highlight the wrong selected answer in red
-                            buttonClass = "p-4 bg-red-50 dark:bg-red-950/20 border-2 border-red-500 dark:border-red-600 rounded-2xl shadow-sm text-red-800 dark:text-red-400 text-left font-bold relative overflow-hidden";
+                            buttonClass = "p-3 md:p-4 bg-red-50 dark:bg-red-950/20 border-2 border-red-500 dark:border-red-600 rounded-2xl shadow-sm text-red-800 dark:text-red-400 text-left font-bold relative overflow-hidden";
                             icon = <XCircle className="absolute right-4 top-1/2 -translate-y-1/2 text-red-500" size={20} />;
                         } else {
                             // Dim out other options
-                            buttonClass = "p-4 bg-white dark:bg-slate-900 border border-gray-150 dark:border-slate-800 rounded-2xl shadow-sm text-gray-400 dark:text-slate-550 text-left opacity-40 relative overflow-hidden";
+                            buttonClass = "p-3 md:p-4 bg-white dark:bg-slate-900 border border-gray-150 dark:border-slate-800 rounded-2xl shadow-sm text-gray-400 dark:text-slate-550 text-left opacity-40 relative overflow-hidden";
                         }
                     }
 
