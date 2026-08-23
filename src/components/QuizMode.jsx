@@ -459,7 +459,7 @@ const QuizModeInner = ({ words, speak }) => {
                             <button
                                 key={mode.id}
                                 onClick={() => setQuizDirection(mode.id)}
-                                className={`w-full p-4 text-left border-2 rounded-2xl transition-all cursor-pointer flex items-center gap-4 ${
+                                className={`select-none w-full p-4 text-left border-2 rounded-2xl transition-all cursor-pointer flex items-center gap-4 ${
                                     isSelected
                                         ? 'border-green-500 bg-green-50/20 text-green-700 dark:text-green-400 dark:bg-green-950/10'
                                         : 'border-gray-200 dark:border-slate-800 hover:border-gray-300 dark:hover:border-slate-700 text-gray-700 dark:text-slate-350 bg-white dark:bg-slate-900'
@@ -503,7 +503,7 @@ const QuizModeInner = ({ words, speak }) => {
                                     { key: 'en_to_category', label: 'Nhìn Tiếng Anh ➔ Chọn Từ loại' },
                                     { key: 'category_to_en', label: 'Nhìn Từ loại ➔ Chọn Tiếng Anh' },
                                 ].map(setting => (
-                                    <label key={setting.key} className="flex items-center justify-between cursor-pointer group">
+                                    <label key={setting.key} className="flex items-center justify-between cursor-pointer group select-none" translate="no">
                                         <span className="text-sm font-medium text-gray-700 dark:text-slate-300 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                                             {setting.label}
                                         </span>
