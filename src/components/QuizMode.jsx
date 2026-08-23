@@ -3,7 +3,38 @@ import { CheckCircle2, Volume2, XCircle, Sparkles, BookOpen, RefreshCw, Headphon
 import IpaGuide from "./IpaGuide";
 import { recordWordResult } from "../utils/progressTracker";
 
-const QuizMode = ({ words, speak }) => {
+class QuizErrorBoundary extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { hasError: false, error: null };
+    }
+    static getDerivedStateFromError(error) {
+        return { hasError: true, error };
+    }
+    componentDidCatch(error, errorInfo) {
+        console.error("QuizMode crashed:", error, errorInfo);
+    }
+    render() {
+        if (this.state.hasError) {
+            return (
+                <div className="p-6 bg-red-50 dark:bg-red-900/20 text-red-900 dark:text-red-200 rounded-2xl border border-red-200 dark:border-red-800">
+                    <h2 className="font-bold text-xl mb-2 flex items-center gap-2">
+                        <XCircle size={24} /> UI Crash
+                    </h2>
+                    <p className="text-sm mb-4">Vui lòng chụp ảnh màn hình này và gửi cho dev:</p>
+                    <pre className="text-xs font-mono bg-white dark:bg-slate-900 p-4 rounded-xl overflow-x-auto whitespace-pre-wrap border border-red-100 dark:border-red-900/50">
+                        {this.state.error && this.state.error.toString()}
+                        {'\n'}
+                        {this.state.error && this.state.error.stack}
+                    </pre>
+                </div>
+            );
+        }
+        return this.props.children;
+    }
+}
+
+const QuizModeInner = ({ words, speak }) => {
     const [started, setStarted] = useState(false);
     const [quizDirection, setQuizDirection] = useState("mixed"); // en_to_vi, vi_to_en, mixed
     const [autoNext, setAutoNext] = useState(true);
@@ -112,52 +143,53 @@ const QuizMode = ({ words, speak }) => {
     }, [started, currentQ, questions, selectedOptionId, showResult, autoNext]);
 
     useEffect(() => {
-        if (timerRef.current) clearTimeout(timerRef.current);
-        if (words.length < 4) {
-            setQuestions([]);
-            return;
-        }
-        
-        // Shuffle and test all available words of the day
-        const shuffled = [...words].sort(() => 0.5 - Math.random());
-        const selected = shuffled;
-
-        const generatedQuestions = selected.map(target => {
-            // Set question type based on configuration selection
-            let type;
-            const exEn = target.example_en || target.example;
-
-            if (quizDirection === 'en_to_vi') {
-                type = 'en_to_vi';
-            } else if (quizDirection === 'vi_to_en') {
-                type = 'vi_to_en';
-            } else if (quizDirection === 'listen_to_en') {
-                type = 'listen_to_en';
-            } else if (quizDirection === 'listen_to_vi') {
-                type = 'listen_to_vi';
-            } else if (quizDirection === 'en_to_category') {
-                type = 'en_to_category';
-            } else if (quizDirection === 'category_to_en') {
-                type = 'category_to_en';
-            } else if (quizDirection === 'listen_example') {
-                type = exEn ? 'listen_example' : 'listen_to_en';
-            } else {
-                let types = [];
-                if (quizSettings.en_to_vi) types.push('en_to_vi');
-                if (quizSettings.vi_to_en) types.push('vi_to_en');
-                if (quizSettings.listen_to_en) types.push('listen_to_en');
-                if (quizSettings.listen_to_vi) types.push('listen_to_vi');
-                if (quizSettings.en_to_category) types.push('en_to_category');
-                if (quizSettings.category_to_en) types.push('category_to_en');
-                if (quizSettings.listen_example && exEn) types.push('listen_example');
-                
-                if (types.length === 0) {
-                    types = ['en_to_vi']; // Fallback if user disabled everything
-                }
-                type = types[Math.floor(Math.random() * types.length)];
+        try {
+            if (timerRef.current) clearTimeout(timerRef.current);
+            if (words.length < 4) {
+                setQuestions([]);
+                return;
             }
             
-            let finalOptions;
+            // Shuffle and test all available words of the day
+            const shuffled = [...words].sort(() => 0.5 - Math.random());
+            const selected = shuffled;
+
+            const generatedQuestions = selected.map(target => {
+                // Set question type based on configuration selection
+                let type;
+                const exEn = target.example_en || target.example;
+
+                if (quizDirection === 'en_to_vi') {
+                    type = 'en_to_vi';
+                } else if (quizDirection === 'vi_to_en') {
+                    type = 'vi_to_en';
+                } else if (quizDirection === 'listen_to_en') {
+                    type = 'listen_to_en';
+                } else if (quizDirection === 'listen_to_vi') {
+                    type = 'listen_to_vi';
+                } else if (quizDirection === 'en_to_category') {
+                    type = 'en_to_category';
+                } else if (quizDirection === 'category_to_en') {
+                    type = 'category_to_en';
+                } else if (quizDirection === 'listen_example') {
+                    type = exEn ? 'listen_example' : 'listen_to_en';
+                } else {
+                    let types = [];
+                    if (quizSettings.en_to_vi) types.push('en_to_vi');
+                    if (quizSettings.vi_to_en) types.push('vi_to_en');
+                    if (quizSettings.listen_to_en) types.push('listen_to_en');
+                    if (quizSettings.listen_to_vi) types.push('listen_to_vi');
+                    if (quizSettings.en_to_category) types.push('en_to_category');
+                    if (quizSettings.category_to_en) types.push('category_to_en');
+                    if (quizSettings.listen_example && exEn) types.push('listen_example');
+                    
+                    if (types.length === 0) {
+                        types = ['en_to_vi']; // Fallback if user disabled everything
+                    }
+                    type = types[Math.floor(Math.random() * types.length)];
+                }
+                
+                let finalOptions;
             if (type === 'en_to_category') {
                 const targetCat = target.category || "Từ vựng";
                 // Get unique categories from words
@@ -191,28 +223,31 @@ const QuizMode = ({ words, speak }) => {
                 const seenVi = new Set([targetViNorm]);
                 const uniqueDistractors = [];
 
-                for (const w of [...words].sort(() => 0.5 - Math.random())) {
-                    if (!w.en || !w.vi) continue;
-                    const normEn = w.en.toLowerCase().trim();
-                    const normVi = w.vi.toLowerCase().trim();
-
+                let attempts = 0;
+                while (uniqueDistractors.length < 3 && attempts < 50) {
+                    attempts++;
+                    const randomWord = words[Math.floor(Math.random() * words.length)];
+                    if (!randomWord.en || !randomWord.vi) continue;
+                    
+                    const normEn = randomWord.en.toLowerCase().trim();
+                    const normVi = randomWord.vi.toLowerCase().trim();
+                    
                     if (!seenEn.has(normEn) && !seenVi.has(normVi)) {
-                        if (type === 'category_to_en' && (w.category || "Từ vựng") === (target.category || "Từ vựng")) {
+                        if (type === 'category_to_en' && (randomWord.category || "Từ vựng") === (target.category || "Từ vựng")) {
                             continue;
                         }
                         if (type === 'listen_example' && exEn) {
                             try {
-                                const regex = new RegExp(`\\b${w.en}\\b`, 'i');
+                                const regex = new RegExp(`\\b${randomWord.en}\\b`, 'i');
                                 if (regex.test(exEn)) continue;
                             } catch (e) {
-                                if (exEn.toLowerCase().includes(w.en.toLowerCase())) continue;
+                                if (exEn.toLowerCase().includes(randomWord.en.toLowerCase())) continue;
                             }
                         }
-
+                        
                         seenEn.add(normEn);
                         seenVi.add(normVi);
-                        uniqueDistractors.push(w);
-                        if (uniqueDistractors.length >= 3) break;
+                        uniqueDistractors.push(randomWord);
                     }
                 }
 
@@ -239,6 +274,9 @@ const QuizMode = ({ words, speak }) => {
         setCurrentQ(0);
         setShowResult(false);
         setSelectedOptionId(null);
+        } catch (error) {
+            console.error("QuizMode generation error:", error);
+        }
     }, [words, key, quizDirection, quizSettings]);
 
     // Auto-pronounce for standard (en_to_vi), listening and en_to_category questions at question load
@@ -440,6 +478,7 @@ const QuizMode = ({ words, speak }) => {
                 {quizDirection === 'mixed' && (
                     <div className="border border-gray-200 dark:border-slate-800 rounded-2xl animate-fade-in">
                         <button 
+                            type="button"
                             onClick={() => setShowAdvancedSettings(!showAdvancedSettings)}
                             className={`w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 dark:bg-slate-800/50 dark:hover:bg-slate-800 transition-colors cursor-pointer ${showAdvancedSettings ? 'rounded-t-2xl' : 'rounded-2xl'}`}
                         >
@@ -468,8 +507,8 @@ const QuizMode = ({ words, speak }) => {
                                         <input 
                                             type="checkbox" 
                                             className="sr-only peer"
-                                            checked={quizSettings[setting.key]}
-                                            onChange={(e) => setQuizSettings({...quizSettings, [setting.key]: e.target.checked})}
+                                            checked={!!quizSettings?.[setting.key]}
+                                            onChange={(e) => setQuizSettings(prev => ({...(prev || defaultSettings), [setting.key]: e.target.checked}))}
                                         />
                                         <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-indigo-600 relative"></div>
                                     </label>
@@ -506,10 +545,11 @@ const QuizMode = ({ words, speak }) => {
                                     { id: 'slow', label: 'Chậm' },
                                 ].map(speed => (
                                     <button
+                                        type="button"
                                         key={speed.id}
                                         onClick={() => setQuizSettings({ ...quizSettings, transitionSpeed: speed.id })}
                                         className={`flex-1 text-xs font-bold py-2 rounded-lg transition-all cursor-pointer ${
-                                            quizSettings.transitionSpeed === speed.id
+                                            quizSettings?.transitionSpeed === speed.id
                                                 ? 'bg-white dark:bg-slate-700 shadow text-indigo-600 dark:text-indigo-400'
                                                 : 'text-gray-500 hover:text-gray-700 dark:text-slate-400 dark:hover:text-slate-300'
                                         }`}
@@ -523,6 +563,7 @@ const QuizMode = ({ words, speak }) => {
                 </div>
 
                 <button
+                    type="button"
                     onClick={handleStartQuiz}
                     className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl text-xs shadow-md transition cursor-pointer"
                 >
@@ -733,4 +774,10 @@ const QuizMode = ({ words, speak }) => {
     );
 };
 
-export default QuizMode;
+export default function QuizMode(props) {
+    return (
+        <QuizErrorBoundary>
+            <QuizModeInner {...props} />
+        </QuizErrorBoundary>
+    );
+}
