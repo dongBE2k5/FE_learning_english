@@ -503,7 +503,7 @@ const QuizModeInner = ({ words, speak }) => {
                                     { key: 'en_to_category', label: 'Nhìn Tiếng Anh ➔ Chọn Từ loại' },
                                     { key: 'category_to_en', label: 'Nhìn Từ loại ➔ Chọn Tiếng Anh' },
                                 ].map(setting => (
-                                    <label key={setting.key} className="flex items-center justify-between cursor-pointer group select-none" translate="no">
+                                    <label key={setting.key} className="relative flex items-center justify-between cursor-pointer group select-none" translate="no">
                                         <span className="text-sm font-medium text-gray-700 dark:text-slate-300 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                                             {setting.label}
                                         </span>
