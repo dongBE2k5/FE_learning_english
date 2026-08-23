@@ -126,8 +126,8 @@ export default function DashboardMode({ words, speak, setActiveTab, onRefreshDat
     return (
         <div className="space-y-6 animate-fade-in pb-10">
             {/* Stats Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border-2 border-blue-500 shadow-sm flex items-center gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                <div className="bg-white dark:bg-slate-900 p-4 sm:p-6 rounded-2xl border-2 border-blue-500 shadow-sm flex items-center gap-4">
                     <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-full flex items-center justify-center text-blue-500 shrink-0">
                         <BookAIcon size={24} />
                     </div>
@@ -137,7 +137,7 @@ export default function DashboardMode({ words, speak, setActiveTab, onRefreshDat
                     </div>
                 </div>
 
-                <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border-2 border-green-500 shadow-sm flex items-center gap-4">
+                <div className="bg-white dark:bg-slate-900 p-4 sm:p-6 rounded-2xl border-2 border-green-500 shadow-sm flex items-center gap-4">
                     <div className="w-12 h-12 bg-green-100 dark:bg-green-900/50 rounded-full flex items-center justify-center text-green-500 shrink-0">
                         <CheckCircle2 size={24} />
                     </div>
@@ -147,7 +147,7 @@ export default function DashboardMode({ words, speak, setActiveTab, onRefreshDat
                     </div>
                 </div>
 
-                <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border-2 border-orange-500 shadow-sm flex items-center gap-4">
+                <div className="bg-white dark:bg-slate-900 p-4 sm:p-6 rounded-2xl border-2 border-orange-500 shadow-sm flex items-center gap-4">
                     <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/50 rounded-full flex items-center justify-center text-orange-500 shrink-0">
                         <Clock size={24} />
                     </div>
@@ -157,7 +157,7 @@ export default function DashboardMode({ words, speak, setActiveTab, onRefreshDat
                     </div>
                 </div>
 
-                <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border-2 border-purple-500 shadow-sm flex items-center gap-4">
+                <div className="bg-white dark:bg-slate-900 p-4 sm:p-6 rounded-2xl border-2 border-purple-500 shadow-sm flex items-center gap-4">
                     <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/50 rounded-full flex items-center justify-center text-purple-500 shrink-0">
                         <Percent size={24} />
                     </div>
